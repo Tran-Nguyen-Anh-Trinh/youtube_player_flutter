@@ -29,8 +29,7 @@ class RawYoutubePlayer extends StatefulWidget {
   _RawYoutubePlayerState createState() => _RawYoutubePlayerState();
 }
 
-class _RawYoutubePlayerState extends State<RawYoutubePlayer>
-    with WidgetsBindingObserver {
+class _RawYoutubePlayerState extends State<RawYoutubePlayer> {
   YoutubePlayerController? controller;
   PlayerState? _cachedPlayerState;
   bool _isPlayerReady = false;
@@ -39,32 +38,11 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.resumed:
-        if (_cachedPlayerState != null &&
-            _cachedPlayerState == PlayerState.playing) {
-          controller?.play();
-        }
-        break;
-      case AppLifecycleState.inactive:
-        break;
-      case AppLifecycleState.paused:
-        _cachedPlayerState = controller!.value.playerState;
-        controller?.pause();
-        break;
-      default:
-    }
   }
 
   @override
@@ -76,30 +54,25 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
         key: widget.key,
         initialData: InAppWebViewInitialData(
           data: player,
-          baseUrl: Uri.parse('https://www.youtube.com'),
+          baseUrl: WebUri.uri(Uri.parse('https://www.youtube.com')) ,
           encoding: 'utf-8',
           mimeType: 'text/html',
         ),
-        initialOptions: InAppWebViewGroupOptions(
-          crossPlatform: InAppWebViewOptions(
-            userAgent: userAgent,
-            mediaPlaybackRequiresUserGesture: false,
-            transparentBackground: true,
-            disableContextMenu: true,
-            supportZoom: false,
-            disableHorizontalScroll: false,
-            disableVerticalScroll: false,
-            useShouldOverrideUrlLoading: true,
-          ),
-          ios: IOSInAppWebViewOptions(
-            allowsInlineMediaPlayback: true,
-            allowsAirPlayForMediaPlayback: true,
-            allowsPictureInPictureMediaPlayback: true,
-          ),
-          android: AndroidInAppWebViewOptions(
-            useWideViewPort: false,
-            useHybridComposition: controller!.flags.useHybridComposition,
-          ),
+        initialSettings: InAppWebViewSettings(
+          userAgent: userAgent,
+          mediaPlaybackRequiresUserGesture: false,
+          transparentBackground: true,
+          disableContextMenu: true,
+          supportZoom: false,
+          disableHorizontalScroll: false,
+          disableVerticalScroll: false,
+          useShouldOverrideUrlLoading: true,
+          allowsInlineMediaPlayback: true,
+          allowsAirPlayForMediaPlayback: true,
+          allowsPictureInPictureMediaPlayback: true,
+          useWideViewPort: false,
+          useHybridComposition: controller!.flags.useHybridComposition,
+          allowBackgroundAudioPlaying: true,
         ),
         onWebViewCreated: (webController) {
           controller!.updateValue(
