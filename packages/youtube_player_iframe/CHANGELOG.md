@@ -1,4 +1,17 @@
 # Changelog
+## 4.0.4
+**Jan 29, 2023**
+- Fixed platform listing in pub.dev
+
+## 4.0.3
+**Jan 29, 2023**
+- Endorse `youtube_player_iframe_web` as default web implementation package.
+
+## 4.0.2
+**Jan 27, 2023**
+- Upgraded dependencies.
+- Fixed issue with `YoutubePlayerController.close`.
+- Exposed `YoutubePlayerValue`.
 
 ## 4.0.1
 **Dec 26, 2022**
